@@ -8,18 +8,23 @@
 #define TOKEN_SIZE 1000
 using namespace std;
 
-typedef pair<int, int> mpair;
+typedef pair<int, int> mpair; // 分别为单词种别和单词自身的值
 
-map<string, mpair> flag_table;
-map<string, mpair> num_table;
-map<string, mpair> str_table;
+map<string, mpair> flag_table; // 标识符表
+map<string, mpair> num_table; // 数字表
+map<string, mpair> str_table; // 字符串表
 
+// 可自行添加关键字或操作符，后续代码作相应修改
 const char *KEY_WORDS[] = {"main", "int", "char", "if", "else", "for", "while", "return", "void"};
 const char *OPERATORS[] = {"=", "+", "-", "*", "/", "(", ")", "[", "]", "{", "}", ",", ":", ";", ">", "<", ">=", "<=", "==", "\""};
 int mark_key[10];
 int mark_ope[50];
-int width_l = 15;
+// 间距
+int width1 = 15;
+int width2 = 7;
+int width3 = 7;
 
+// 是否为关键字
 int iskey(char *str)
 {
 	int i;
@@ -32,6 +37,7 @@ int iskey(char *str)
 	return -1;
 }
 
+// 是否为操作符
 int isope(char *str)
 {
 	int i;
@@ -44,7 +50,8 @@ int isope(char *str)
 	return -1;
 }
 
-void get_identif(char *token, char *ptr, FILE *fp)
+// 获取关键字或标识符
+void get_keyorid(char *token, char *ptr, FILE *fp)
 {
 	while(isalnum(*ptr)){
 		*++ptr = fgetc(fp);
@@ -52,18 +59,18 @@ void get_identif(char *token, char *ptr, FILE *fp)
 	ungetc(*ptr, fp);
 	*ptr = '\0';
 	int flag = iskey(token);
-	if(flag != -1){
+	if(flag != -1){ // 是关键字
 		if(!mark_key[flag])
 			mark_key[flag] = 1;
-		cout<< "  " << left << setw(width_l) << token << setw(width_l) << flag + 1 << setw(width_l) << flag + 1 << endl;
+		cout<< "  " << left << setw(width1) << token << setw(width2) << flag + 1 << setw(width3) << flag + 1 << endl;
 	}
-	else{
+	else{ // 是标识符
 		string s = "";
 		map<string, mpair>::iterator it;
 		s.append(token);
 		it = flag_table.find(s);
 		mpair mp;
-		if(it == flag_table.end()){
+		if(it == flag_table.end()){ // 标识符不在符号表里
 			mp = make_pair(10, flag_table.size() + 1);
 			flag_table[s] = mp;
 		}
@@ -72,16 +79,17 @@ void get_identif(char *token, char *ptr, FILE *fp)
 			mp = it->second;
 		}
 		string sub;
-		if(s.length() > width_l - 1){
-			sub = s.substr(0, width_l - 4);
+		if(s.length() > width1 - 1){ // 字符串太长，为显示方便截断后面的串
+			sub = s.substr(0, width1 - 4);
 			sub.append("...");
 		}
 		else
 			sub = s;
-		cout<< "  " << left << setw(width_l) << sub << setw(width_l) << mp.first << setw(width_l) << mp.second << endl;
+		cout<< "  " << left << setw(width1) << sub << setw(width2) << mp.first << setw(width3) << mp.second << endl;
 	}
 }
 
+// 获取数字
 void get_number(char *token, char *ptr, FILE *fp)
 {
 	while(isdigit(*ptr)){
@@ -103,34 +111,35 @@ void get_number(char *token, char *ptr, FILE *fp)
 		mp = it->second;
 	}
 	string sub;
-	if(num.length() > width_l - 1){
-		sub = num.substr(0, width_l - 4);
+	if(num.length() > width1 - 1){
+		sub = num.substr(0, width1 - 4);
 		sub.append("...");
 	}
 	else
 		sub = num;
-	cout<< "  " << left << setw(width_l) << sub << setw(width_l) << mp.first << setw(width_l) << mp.second << endl;
+	cout<< "  " << left << setw(width1) << sub << setw(width2) << mp.first << setw(width3) << mp.second << endl;
 }
 
+// 判断是否为字符串
 void try_string(char *token, char *ptr, FILE *fp)
 {
 	*++ptr = fgetc(fp);
-	while(!feof(fp) && (*ptr != '"')){
+	while(!feof(fp) && *ptr != '"'){
 		*++ptr = fgetc(fp);
 	}
-	if(!feof(fp))
+	if(!feof(fp)) // 还没读到文件尾
 		*++ptr = '\0';
-	else
+	else // 已经读到文件尾
 		*ptr = '\0';
 	string s = "", sub;
 	s.append(token);
-	if(s.size() > width_l - 1){
-		sub = s.substr(0, width_l - 4);
+	if(s.size() > width1 - 1){
+		sub = s.substr(0, width1 - 4);
 		sub.append("...");
 	}
 	else
 		sub = s;
-	if(*(ptr-1) == '"'){
+	if(*(ptr-1) == '"'){ // 找到匹配的 "
 		map<string, mpair>::iterator it;
 		it = str_table.find(s);
 		mpair mp;
@@ -142,14 +151,14 @@ void try_string(char *token, char *ptr, FILE *fp)
 			it = str_table.find(s);
 			mp = it->second;
 		}
-		cout<< "  " << left << setw(width_l) << sub << setw(width_l) << mp.first << setw(width_l) << mp.second  << endl;
+		cout<< "  " << left << setw(width1) << sub << setw(width2) << mp.first << setw(width3) << mp.second  << endl;
 	}
-	else{
+	else{ // 找不到匹配的 "
 		int i;
 		int len = strlen(token);
 		for(i = 0; i < len - 1; i++)
 			ungetc(*--ptr, fp);
-		cout<< "  " << left << setw(width_l) << sub << setw(width_l) << "error!, miss terminal '\"'" << endl;
+		cout<< "  " << left << setw(width1) << sub << setw(width2) << "error!, miss terminal '\"'" << endl;
 	}
 }
 
@@ -166,7 +175,7 @@ void try_double_ope(char *token, char *ptr, FILE *fp)
 		sub = isope(token);
 		mark_ope[sub] = 1;
 	}
-	cout<< "  " << left << setw(width_l) << token << setw(width_l) << sub + 21 << setw(width_l) << sub + 21 << endl;
+	cout<< "  " << left << setw(width1) << token << setw(width2) << sub + 21 << setw(width3) << sub + 21 << endl;
 }
 
 void try_single_ope(char *token, char *ptr, FILE *fp)
@@ -175,32 +184,35 @@ void try_single_ope(char *token, char *ptr, FILE *fp)
 	int sub = isope(token);
 	if(sub != -1){
 		mark_ope[sub] = 1;
-		cout<< "  " << left << setw(width_l) << token << setw(width_l) << sub + 21 << setw(width_l) << sub + 21 << endl;
+		cout<< "  " << left << setw(width1) << token << setw(width2) << sub + 21 << setw(width3) << sub + 21 << endl;
 	}
 	else{
-		cout<< "  " << left << setw(width_l) << token << "error" << endl;
+		if(token[0] < 0 || token[0] > 127) // 非 ASCII 码
+			token[0] = '?';
+		cout<< "  " << left << setw(width1) << token << "error" << endl;
 	}
 }
 
+// 判断一个串
 void judge_str(char ch, FILE *fp)
 {
 	char token[TOKEN_SIZE];
 	char *ptr = token;
 	*ptr = ch;
-	if(isalpha(*ptr)){
-		get_identif(token, ptr, fp);
+	if(isalpha(*ptr)){ // token 以字母开头
+		get_keyorid(token, ptr, fp); // 判断是关键字或标识符
 	}
-	else if(isdigit(*ptr)){
-		get_number(token, ptr, fp);
+	else if(isdigit(*ptr)){ // token 以数字开头
+		get_number(token, ptr, fp); // 判断是数字
 	}
-	else if(*ptr == '"'){
-		try_string(token, ptr, fp);
+	else if(*ptr == '"'){ // token 以 " 开头
+		try_string(token, ptr, fp); // 可能是字符串
 	}
-	else if(*ptr == '>' || *ptr == '<' || *ptr == '='){
+	else if(*ptr == '>' || *ptr == '<' || *ptr == '='){ // 可能是双目操作符
 		try_double_ope(token, ptr, fp);
 	}
 	else{
-		try_single_ope(token, ptr, fp);
+		try_single_ope(token, ptr, fp); //单目操作符
 	}
 }
 
@@ -211,7 +223,7 @@ int main()
 		perror("in.txt open failed\n");
 		return 1;
 	}
-	cout << "\n  " << left << setw(width_l) << "STRING" << setw(width_l) << "KINDS" << setw(width_l) << "SELFWORD" << endl;
+	cout << "\n  " << left << setw(width1) << "STRING" << setw(width2) << "KINDS" << setw(width3) << "SELFWORD" << endl;
 	printf("  --------------------------------------\n");
 	char ch = fgetc(fp);
 	while(!feof(fp)){
@@ -220,5 +232,6 @@ int main()
 		}
 		ch = fgetc(fp);
 	}
+	fclose(fp);
 	return 0;
 }
