@@ -212,7 +212,7 @@ void judge_str(char ch, FILE *fp)
 		try_double_ope(token, ptr, fp);
 	}
 	else{
-		try_single_ope(token, ptr, fp); //单目操作符
+		try_single_ope(token, ptr, fp); //可能是单目操作符
 	}
 }
 
