@@ -16,8 +16,8 @@ char anstr[STR_SIZE];
 char Vn[] = {"ETFAB"}; // 非终结符
 char Vt[] = {"i*()+@"}; // 终结符
 char empch = '@';
-char S = 'E';
-char fch = '#';
+char S = 'E'; // 文法开始符
+char fch = '#'; // 标记符
 int step;
 int top;
 int width1 = 6;
@@ -114,6 +114,7 @@ bool is_Vt(char ch)
 	return false;
 }
 
+// 反向输入
 void reverse_push(string str)
 {
 	for(int i = str.length()-1; i >= 0; i--){

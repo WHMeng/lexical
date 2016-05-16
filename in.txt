@@ -1,11 +1,1 @@
-main {
-	int a1[2];
-	a1[0]eofjeif#@#@# = 17987989868686868;
-	a1[1] = 5;
-	cjffffffffffffffffff
-	int c1 = a1[0] + a1[1];
-	if(c1 >= 3){
-		c1 = c1 + 2;
-	}
-	return 0;
-}
+i*(i+i)+i
