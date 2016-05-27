@@ -12,6 +12,8 @@ using namespace std;
 typedef pair<char, char> mpair;
 
 map<mpair, string> anltable; // 分析表
+map<char, string> FIRST;
+map<char, string> FOLLOW;
 deque<char> st;
 
 char anstr[STR_SIZE];
@@ -28,7 +30,144 @@ int width3 = 8;
 int width4 = 9;
 int width5 = 8;
 
-void buile_anltable()
+// 产生式结构
+typedef struct{
+	char lch;
+	string rstr[100];
+	int n;
+}Pdt;
+
+Pdt pdt[100];
+int pnum;
+
+// 产生式
+void build_production()
+{
+	pdt[pnum].n = 0;
+	int &n1 = pdt[pnum].n;
+	pdt[pnum].lch = 'E';
+	pdt[pnum].rstr[n1++] = "TA";
+	pnum++;
+
+	pdt[pnum].n = 0;
+	int &n2 = pdt[pnum].n;
+	pdt[pnum].lch = 'A';
+	pdt[pnum].rstr[n2++] = "+TA";
+	pdt[pnum].rstr[n2++] = "@";
+	pnum++;
+
+	pdt[pnum].n = 0;
+	int &n3 = pdt[pnum].n;
+	pdt[pnum].lch = 'T';
+	pdt[pnum].rstr[n3++] = "FB";
+	pnum++;
+
+	pdt[pnum].n = 0;
+	int &n4 = pdt[pnum].n;
+	pdt[pnum].lch = 'B';
+	pdt[pnum].rstr[n4++] = "*FB";
+	pdt[pnum].rstr[n4++] = "@";
+	pnum++;
+
+	pdt[pnum].n = 0;
+	int &n5 = pdt[pnum].n;
+	pdt[pnum].lch = 'F';
+	pdt[pnum].rstr[n5++] = "(E)";
+	pdt[pnum].rstr[n5++] = "i";
+	pnum++;
+}
+
+bool is_Vt(char ch)
+{
+	int len = strlen(Vt);
+	for(int i = 0; i < len; i++){
+		if(ch == Vt[i]){
+			return true;
+		}
+	}
+	return false;
+}
+
+void build_FIRST()
+{
+	string rstr;
+	rstr = "+";
+	rstr.append(1, empch);
+	FIRST['A'] = rstr;
+	rstr = "*";
+	rstr.append(1, empch);
+	FIRST['B'] = rstr;
+	rstr = "(i";
+	FIRST['F'] = rstr;
+	rstr = "(i";
+	FIRST['T'] = rstr;
+	FIRST['E'] = rstr;
+}
+
+void build_FOLLOW()
+{
+	string rstr;
+	rstr = ")";
+	rstr.append(1, fch);
+	FOLLOW['E'] = rstr;
+	FOLLOW['A'] = rstr;
+	rstr = "+)";
+	rstr.append(1, fch);
+	FOLLOW['T'] = rstr;
+	FOLLOW['B'] = rstr;
+	rstr = "*+)";
+	rstr.append(1, fch);
+	FOLLOW['F'] = rstr;
+}
+
+bool empset_in_FIRST(string str)
+{
+	for(int i = 0; i < str.length(); i++)
+		if(str[i] == empch)
+			return true;
+	return false;
+}
+
+#if 1
+void build_anltable()
+{
+	for(int i = 0; i < pnum; i++){
+		int lch = pdt[i].lch;
+		int n = pdt[i].n;
+		map<char, string>:: iterator it;
+		it = FIRST.find(lch);
+		string firstset = it->second;
+		for(int j = 0; j < firstset.length(); j++){
+			char ch = firstset[j];
+			int chose = 0;
+			if(n > 1){
+				for(int k = 0; k < n; k++){
+					char c = pdt[i].rstr[k][0];
+					if(ch == c){
+						chose = k;
+						break;
+					}
+				}
+			}
+			mpair mp = make_pair(lch, ch);
+			anltable[mp] = pdt[i].rstr[chose];
+		}
+		if(empset_in_FIRST(firstset) == true){
+			map<char, string>:: iterator it2;
+			it2 = FOLLOW.find(lch);
+			string followset = it2->second;
+			for(int j = 0; j < followset.length(); j++){
+				char ch = followset[j];
+				mpair mp = make_pair(lch, ch);
+				anltable[mp] = empch;
+			}
+		}
+	}
+}
+#endif
+
+#if 0
+void build_anltable()
 {
 	mpair mp;
 	string str;
@@ -72,22 +211,21 @@ void buile_anltable()
 	str = "@";
 	anltable[mp] = str;
 }
+#endif
+
+void show_anltable()
+{
+	map<mpair, string>:: iterator it;
+	for(it = anltable.begin(); it != anltable.end(); it++){
+		mpair mp = it->first;
+		cout << "(" << mp.first << ", " << mp.second << ")" << " -> " << it->second << endl;
+	}
+}
 
 void input_string(string &instr)
 {
 	cin >> instr;
 	instr.append(1, fch); // 添加标记符
-}
-
-bool is_Vt(char ch)
-{
-	int len = strlen(Vt);
-	for(int i = 0; i < len; i++){
-		if(ch == Vt[i]){
-			return true;
-		}
-	}
-	return false;
 }
 
 // 反向输入
@@ -179,7 +317,10 @@ int main()
 	string instr;
 	input_string(instr);
 	print_title();
-	buile_anltable();
+	build_production();
+	build_FIRST();
+	build_FOLLOW();
+	build_anltable();
 	bool ans = analyze_string(instr);
 	if(ans){
 		cout << "failed" << ans << endl;
