@@ -1,19 +1,21 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cstring>
+#include <string>
 #include <map>
+#include <deque>
 #include <iomanip>
 #include <iostream>
 #define STR_SIZE 1000
-#define STACK_SIZE 1000
 using namespace std;
 typedef pair<char, char> mpair;
 
 map<mpair, string> anltable; // 分析表
-char Stack[STACK_SIZE];
+deque<char> st;
 
 char anstr[STR_SIZE];
-char Vn[] = {"ETFAB"}; // 非终结符
+char Vn[] = {"ETFAB"}; // 非终结符，A表示E',B表示T'
 char Vt[] = {"i*()+@"}; // 终结符
 char empch = '@';
 char S = 'E'; // 文法开始符
@@ -71,32 +73,6 @@ void buile_anltable()
 	anltable[mp] = str;
 }
 
-bool stack_push(char ch)
-{
-	if(top < STACK_SIZE){
-		Stack[top++] = ch;
-		return true;
-	}
-	return false;
-}
-
-char stack_top()
-{
-	if(top > 0){
-		return Stack[top-1];
-	}
-	return 0;
-}
-
-bool stack_pop()
-{
-	if(top > 0){
-		top--;
-		return true;
-	}
-	return false;
-}
-
 void input_string(string &instr)
 {
 	cin >> instr;
@@ -119,7 +95,7 @@ void reverse_push(string str)
 {
 	for(int i = str.length()-1; i >= 0; i--){
 		if(str[i] != empch){ // 产生式右部不为空
-			stack_push(str[i]);
+			st.push_front(str[i]);
 		}
 	}
 }
@@ -136,8 +112,8 @@ void print_table(int cur, string instr, char Left, string Right)
 	else{
 		LR = Right;
 	}
-	for(int i = 0; i < top; i++){
-		str.append(1, Stack[i]);
+	for(int i = st.size()-1; i >= 0; i--){
+		str.append(1, st[i]);
 	}
 	str.append(1, Left);
 	step++;
@@ -147,13 +123,13 @@ void print_table(int cur, string instr, char Left, string Right)
 
 int analyze_string(string instr)
 {
-	stack_push(fch); // 标记符入栈
-	stack_push(S); // 开始符号入栈
+	st.push_front(fch);
+	st.push_front(S);
 	int slen = instr.length();
 	for(int i = 0; i < slen; i++){
 		char term = instr[i]; // 当前终结符
-		char topch = stack_top(); // 区栈顶元素
-		stack_pop();
+		char topch = st.front(); // 区栈顶元素
+		st.pop_front();
 		bool f = is_Vt(topch);
 		if(f == true){ // 栈顶元素是终结符
 			if(topch == term){
