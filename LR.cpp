@@ -234,6 +234,7 @@ void work(char *str)
 int main()
 {
 	char str[STRSIZE];
+	printf("input the string end by #:\n");
 	scanf("%s", str);
 	init_G();
 	init_ACTION();

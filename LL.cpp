@@ -1,4 +1,4 @@
-ï»¿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <cstring>
@@ -11,15 +11,15 @@
 using namespace std;
 typedef pair<char, char> mpair;
 
-map<mpair, string> anltable; // åˆ†æè¡¨
+map<mpair, string> anltable; // ·ÖÎö±í
 deque<char> st;
 
 char anstr[STR_SIZE];
-char Vn[] = {"ETFAB"}; // éç»ˆç»“ç¬¦ï¼ŒAè¡¨ç¤ºE',Bè¡¨ç¤ºT'
-char Vt[] = {"i*()+@"}; // ç»ˆç»“ç¬¦
+char Vn[] = {"ETFAB"}; // ·ÇÖÕ½á·û£¬A±íÊ¾E',B±íÊ¾T'
+char Vt[] = {"i*()+@"}; // ÖÕ½á·û
 char empch = '@';
-char S = 'E'; // æ–‡æ³•å¼€å§‹ç¬¦
-char fch = '#'; // æ ‡è®°ç¬¦
+char S = 'E'; // ÎÄ·¨¿ªÊ¼·û
+char fch = '#'; // ±ê¼Ç·û
 int step;
 int top;
 int width1 = 6;
@@ -75,8 +75,9 @@ void buile_anltable()
 
 void input_string(string &instr)
 {
+	cout << "input the string:\n";
 	cin >> instr;
-	instr.append(1, fch); // æ·»åŠ æ ‡è®°ç¬¦
+	instr.append(1, fch); // Ìí¼Ó±ê¼Ç·û
 }
 
 bool is_Vt(char ch)
@@ -90,11 +91,11 @@ bool is_Vt(char ch)
 	return false;
 }
 
-// åå‘è¾“å…¥
+// ·´ÏòÊäÈë
 void reverse_push(string str)
 {
 	for(int i = str.length()-1; i >= 0; i--){
-		if(str[i] != empch){ // äº§ç”Ÿå¼å³éƒ¨ä¸ä¸ºç©º
+		if(str[i] != empch){ // ²úÉúÊ½ÓÒ²¿²»Îª¿Õ
 			st.push_front(str[i]);
 		}
 	}
@@ -117,8 +118,10 @@ void print_table(int cur, string instr, char Left, string Right)
 	}
 	str.append(1, Left);
 	step++;
-	cout << left << setw(width1) << step << setw(width2) << str << setw(width3) << instr[cur]
-		<< setw(width4) << instr.substr(cur) << setw(width5) << (Right==""?"":LR) << endl;
+	cout << left << setw(width1) << step << setw(width2) << str << setw(width3) << 
+instr[cur]
+		<< setw(width4) << instr.substr(cur) << setw(width5) << (Right==""?"":LR) 
+<< endl;
 }
 
 int analyze_string(string instr)
@@ -127,11 +130,11 @@ int analyze_string(string instr)
 	st.push_front(S);
 	int slen = instr.length();
 	for(int i = 0; i < slen; i++){
-		char term = instr[i]; // å½“å‰ç»ˆç»“ç¬¦
-		char topch = st.front(); // åŒºæ ˆé¡¶å…ƒç´ 
+		char term = instr[i]; // µ±Ç°ÖÕ½á·û
+		char topch = st.front(); // ÇøÕ»¶¥ÔªËØ
 		st.pop_front();
 		bool f = is_Vt(topch);
-		if(f == true){ // æ ˆé¡¶å…ƒç´ æ˜¯ç»ˆç»“ç¬¦
+		if(f == true){ // Õ»¶¥ÔªËØÊÇÖÕ½á·û
 			if(topch == term){
 				print_table(i, instr, topch, "");
 				continue;
@@ -140,7 +143,7 @@ int analyze_string(string instr)
 				return 1;
 		}
 		else{
-			if(topch == fch){ // ç»“æŸæ ‡è®°
+			if(topch == fch){ // ½áÊø±ê¼Ç
 				if(topch == term){
 					print_table(i, instr, topch, "successed");
 					return 0;
@@ -148,7 +151,7 @@ int analyze_string(string instr)
 				else
 					return 2;
 			}
-			else{ // æ¨å¯¼
+			else{ // ÍÆµ¼
 				mpair mp;
 				mp = make_pair(topch, term);
 				map<mpair, string>:: iterator it;
@@ -168,14 +171,16 @@ int analyze_string(string instr)
 
 void print_title()
 {
-	cout << endl << left << setw(width1) << "STEP" << setw(width2) << "STACK" << setw(width3)
-		<< "CURRENT" << setw(width4) << "LEFTOVER" << setw(width5) << "PRODUCTION" << endl;
+	cout << endl << left << setw(width1) << "STEP" << setw(width2) << "STACK" << setw
+(width3)
+		<< "CURRENT" << setw(width4) << "LEFTOVER" << setw(width5) << "PRODUCTION" 
+<< endl;
 	cout << "---------------------------------------------------" << endl;
 }
 
 int main()
 {
-	freopen("in.txt", "r", stdin);
+	//freopen("in.txt", "r", stdin);
 	string instr;
 	input_string(instr);
 	print_title();
@@ -186,3 +191,4 @@ int main()
 	}
 	return 0;
 }
+
