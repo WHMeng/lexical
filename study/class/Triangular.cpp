@@ -109,8 +109,3 @@ copy(const Triangular &rhs){
 
 
 
-
-
-
-
-

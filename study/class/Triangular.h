@@ -5,10 +5,18 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include "Triangular_iterator.h"
 using namespace std;
 
 class Triangular{
 public:
+	typedef Triangular_iterator iterator;
+	Triangular_iterator begin() const{
+		return Triangular_iterator(_beg_pos);
+	}
+	Triangular_iterator end() const{
+		return Triangular_iterator(_beg_pos+_length);
+	}
 	Triangular();
 	Triangular(int len);
 	Triangular(int len = 1, int bp = 1);
