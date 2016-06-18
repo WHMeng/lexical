@@ -1,10 +1,9 @@
 #ifndef TRIANGULAR_H
 #define TRIANGULAR_H
 
-#include <iostream>
 #include <string>
-#include <functional>
 #include <vector>
+#include <iostream>
 #include "Triangular_iterator.h"
 using namespace std;
 
@@ -18,7 +17,6 @@ public:
 		return Triangular_iterator(_beg_pos+_length);
 	}
 	Triangular();
-	Triangular(int len);
 	Triangular(int len = 1, int bp = 1);
 	int length() const {return _length;}
 	int beg_pos() const {return _beg_pos;}
@@ -30,7 +28,9 @@ public:
 	static bool is_elem(int value);
 	static void gen_elements(int length);
 	static void gen_elems_to_value(int value);
-	static void display(int length, int beg_pos, ostream &os = cout);
+	static void display(int length, int beg_pos, ostream &os=cout);
+	friend int operator * (const Triangular_iterator &rhs);
+	friend void Triangular_iterator::check_integrity() const;
 private:
 	int _length;
 	int _beg_pos;
