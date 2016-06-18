@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Triangular.h"
 
 vector<int> Triangular::_elems;
@@ -82,7 +83,7 @@ is_elem(int value){
 			_elems[_elems.size()-1] < value)
 		gen_elems_to_value(value);
 	vector<int>::iterator found_it;
-	vector<int>::iterator end_it = _elems.end();;
+	vector<int>::iterator end_it = _elems.end();
 	found_it = find(_elems.begin(), end_it, value);
 	return found_it != end_it;
 }
@@ -97,8 +98,23 @@ copy(const Triangular &rhs){
 	return *this;
 }
 
+ostream & operator << (ostream &os, const Triangular &rhs){
+	os << "( " << rhs.beg_pos() << ", " << rhs.length() << " )";
+	rhs.display(rhs.length(), rhs.beg_pos(), os);
+	return os;
+}
 
-
-
-
-
+void Triangular::
+display(int length, int beg_pos, ostream &os){
+#if 0
+	int elem_cnt = beg_pos + length - 1;
+	if(_elems.size() < elem_cnt)
+		gen_elements(elem_cnt);
+	for(int i = beg_pos-1; i < elem_cnt; i++)
+		os << ' ' << _elems[i];
+#endif
+	next_reset();
+	int val;
+	while(next(val))
+		os << ' ' << val;
+}

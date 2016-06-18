@@ -24,13 +24,14 @@ public:
 
 	bool next(int &val) const;
 	void next_reset() const {_next = _beg_pos - 1;}
-	Triangular &Triangular::copy(const Triangular &rhs);
+	Triangular &copy(const Triangular &rhs);
 	static bool is_elem(int value);
 	static void gen_elements(int length);
 	static void gen_elems_to_value(int value);
 	static void display(int length, int beg_pos, ostream &os=cout);
 	friend int operator * (const Triangular_iterator &rhs);
 	friend void Triangular_iterator::check_integrity() const;
+	friend ostream & operator << (ostream &os, const Triangular &rhs);
 private:
 	int _length;
 	int _beg_pos;
