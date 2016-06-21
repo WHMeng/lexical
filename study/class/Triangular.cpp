@@ -106,15 +106,16 @@ ostream & operator << (ostream &os, const Triangular &rhs){
 
 void Triangular::
 display(int length, int beg_pos, ostream &os){
-#if 0
 	int elem_cnt = beg_pos + length - 1;
 	if(_elems.size() < elem_cnt)
 		gen_elements(elem_cnt);
 	for(int i = beg_pos-1; i < elem_cnt; i++)
 		os << ' ' << _elems[i];
-#endif
+#if 0
+#if 0
 	next_reset();
 	int val;
 	while(next(val))
 		os << ' ' << val;
+#endif
 }
