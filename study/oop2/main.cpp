@@ -1,23 +1,16 @@
 #include "num_sequence.h"
-#include "Fibonacci.h"
-#include "Triangular.h"
+//#include "Fibonacci.h"
+//#include "Triangular.h"
 
 int main(){
+#if 0
 	const int pos = 8;
 	Fibonacci fbi;
-	Triangular tri;
+	num_sequence *cp;
+	cp = &fbi;
 
-	display(cout, fbi, pos);
+	display(cout, *cp);
 	cout << endl;
-
-	display(cout, fbi);
-	cout << endl;
-
-	display(cout, tri, pos);
-	cout << endl;
-
-	display(cout, tri);
-	cout << endl;
-
+#endif
 	return 0;
 }

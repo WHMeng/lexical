@@ -1,0 +1,3 @@
+#include "num_sequence.h"
+
+ostream& operator<<( ostream &os, const num_sequence &ns );
