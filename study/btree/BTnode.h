@@ -1,5 +1,3 @@
-#ifndef BTNODE_H
-#define BTNODE_H
 
 template <typename Type>
 class BinaryTree;
@@ -7,11 +5,11 @@ class BinaryTree;
 template <typename valType>
 class BTnode{
 public:
-	BTnode(const valType &val);
-	void insert_value(const valType &val);
-	void lchild_leaf(BTnode *leaf, BTnode *subtree);
-	void remove_value(const valType &val, BTnode *& prev);
 	friend class BinaryTree<valType>;
+	BTnode(const valType &val);
+	void lchild_leaf(BTnode *leaf, BTnode *subtree);
+	void insert_value(const valType &val);
+	void remove_value(const valType &val, BTnode *& prev);
 private:
 	valType _val;
 	int _cnt;
@@ -27,7 +25,4 @@ BTnode(const valType &val)
 	_cnt = 1;
 	_lchild = _rchild = 0;
 }
-
-
-#endif
 

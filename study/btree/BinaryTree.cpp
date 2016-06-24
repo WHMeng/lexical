@@ -4,7 +4,6 @@ template <typename elemType>
 void BinaryTree<elemType>::
 remove_root(){
 	if(!_root) return;
-
 	BTnode<elemType> *tmp = _root;
 	if(_root->_rchild){
 		_root = _root->_rchild;
@@ -20,16 +19,6 @@ remove_root(){
 	else 
 		_root = _root->_lchild;
 	delete tmp;
-}
-
-template <typename elemType>
-void BinaryTree<elemType>::
-clear(BTnode<elemType> *pt){
-	if(pt){
-		clear(pt->_lchild);
-		clear(pt->_rchild);
-		delete pt;
-	}
 }
 
 template <typename elemType>
