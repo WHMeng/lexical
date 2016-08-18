@@ -17,9 +17,11 @@ operator * (const Triangular_iterator &rhs){
 
 void Triangular_iterator::
 check_integrity() const{
-#if 0
-	if(_index >= Triangular::_max_elems)
-		throw iterator_overflow();
+#if 1
+	if(_index >= Triangular::_max_elems){
+		iterator_overflow ex(_index, Triangular::_max_elems);
+		throw ex;
+	}
 #endif
 	if(_index >= Triangular::_elems.size())
 		Triangular::gen_elements(_index+1);

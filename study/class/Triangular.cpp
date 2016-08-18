@@ -112,7 +112,6 @@ display(int length, int beg_pos, ostream &os){
 	for(int i = beg_pos-1; i < elem_cnt; i++)
 		os << ' ' << _elems[i];
 #if 0
-#if 0
 	next_reset();
 	int val;
 	while(next(val))
