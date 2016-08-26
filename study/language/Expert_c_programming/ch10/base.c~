@@ -1,0 +1,17 @@
+//
+// 锯齿状数组：字符串指针数组
+//
+// char *turnip[UMPTEEN];
+// char my_string[] = "your memseage here";
+// turnip[i] = &my_string[0]; // 共享字符串
+// turnip[j] = malloc(strlen(my_string)+1);
+// strcpy(turnip[j], my_string); // 拷贝字符串
+// ---------------------------------------------------------------------
+//
+// 数组和指针参数是如何被编译器修改的：
+//
+// 实参                  所匹配的形参
+// char c[8][10];        char(*c)[10]; // 数组指针
+// char *c[15];          char **c;
+// char (*c)[64];        char (*c)[64];
+// char **c;             char **c;
