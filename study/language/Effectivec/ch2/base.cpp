@@ -51,7 +51,7 @@
 // (7) 为多态基类声明 virtual 析构函数
 //     Declare destructors virtual in ploymorphic base classes
 //
-//     带多态性质的 bese classes 应该声明一个 virtual 析构函数。如果 class
+//     带多态性质的 base classes 应该声明一个 virtual 析构函数。如果 class
 //     带有任何 virtual 函数，它就应该拥有一个 virtual 析构函数
 //
 //     --使用基类指针指向派生类对象问题
