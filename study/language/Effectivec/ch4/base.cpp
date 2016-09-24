@@ -290,6 +290,42 @@
 //
 //		boundingBox() 的调用产生一个临时对象，而 upperLeft() 返回该对象的引用；这个语句
 //		执行后，临时对象将被销毁，此时 pUpperLeft 将变成空悬指针(dangling pointer)
+//
+// (29) 为“异常安全”而努力是值得的
+//      Strive for exception-safe code
+//
+//      ---- 待补充
+//
+// (30) 透彻了解 inlining 的里里外外
+//		Understand the ins and outs of inlining 
+//
+//		不需蒙受函数调用所招致的额外开销
+//
+//		造成程序体积太大 --> 导致换页 --> 降低指令高速缓存的命中率 --> 效率损失
+//
+//		适用：编译器对“函数本体”所产生的代价比“函数调用”所产生的代价小
+//
+//		编译器通常不对“通过函数指针而进行的调用”实施 inlining
+//
+//		inline void f() {...}
+//		void (*pf)() = f;
+//		...
+//		f(); // 这个调用将被 inlined，因为它是个正常调用
+//		pf(); // 这个调用或许不被 inlined，因为它通过函数指针达成
+//
+//		inline 无法随程序升级而升级
+//
+//		难以调试，inline 不是函数，难以对本体设置断点
+//
+// (31) 将文件间的编译依存关系降至最低
+//      Minimize compilation dependencies between files
+//
+//      支持“编译依存性最小化”的一般构想是：相依于声明式，不要相依于定义式
+//      基于此构想的两个手段是 Handle classes 和 Interface classes
+//
+//      程序库头文件应该以“完全且仅有声明式”的形式存在，这种做法不论是否
+//      涉及 templates 都适用
+//
 // 
 //
 //
