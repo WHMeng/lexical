@@ -290,4 +290,50 @@
 // 如果在构造函数或析构函数中调用虚函数，则运行的是为构造函数或析构函数
 // 自身类型定义的版本
 //
+// 名字冲突与继承
+// -----------------
+//
+// 与基类成员同名的派生类成员将屏蔽对基类成员的直接访问
+// 可以使用作用域操作符访问被屏蔽成员
+//
+// 重载函数
+// ---------
+//
+// 如果派生重定义了重载函数，则通过派生类只能访问派生类中重定义的那些成员
+// 可以使用 using 引入基类的函数，或者可以在对象中使用作用域操作符
+//
+// class Base{
+// public:
+//     virtual void func() {...} // 当然也可以不是 virtual 函数
+//     ...
+// };
+//
+// class Derived : public Base{
+// public:
+//     virtual void func(int x) {...}
+//     // using Base::func;
+//     ...
+// };
+//
+// Derived d;
+// Derived *pd = &d;
+// pd->func(); // error，但把派生类中的注释去掉就 ok
+// pd->func(4); // ok
+// pd->Base::func(); // ok
+//
+// 容器与继承
+// ------------
+//
+// multiset<Item_base> basket;
+// Item_base base;
+// Bulk_item bulk;
+// basket.insert(base); // ok
+// basket.insert(bulk); // ok, 但派生部分被切掉
+//                      // 而且放入容器后，它将不再是派生类对象
+// 
+// 句柄类与继承
+// --------------
+//
+//
+//
 //
