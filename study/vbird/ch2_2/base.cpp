@@ -180,6 +180,19 @@
 //
 // $ file filename
 //
+// 文件的搜寻
+// ------------
+//
+// 1）寻找可执行文件：which [-a] command
+// -a : 将所有由用户 PATH 目录中可以找到的命令均列出
+// # which cd
+// 将找不到可执行文件，因为 cd 是 bash 内建的命令，可以用 type 命令
+//
+// 2）寻找文件：
+// find [PATH] [option] [action]: 搜硬盘
+// whereis, locate : 搜数据库
+// updatedb : 更新数据库，需 root 权限
+//
 //
 //
 //

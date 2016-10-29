@@ -1,0 +1,9 @@
+I have a pen, I have+ an .apple
+ea~
+applepen
+I have a pen, I have pear
+ea~
+pearpen
+applepen pearpen
+ea~
+penpearapplepen
