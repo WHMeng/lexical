@@ -48,6 +48,10 @@ connection = mysql_real_connect(connection ...
 
 ---------------------------------------------------------------------------------------------------
 
+编译
+
+gcc -I/usr/include/mysql xx.c -L/usr/lib64/mysql -lmysqlclient -o xx // 不同系统具体情况不同
+
 错误处理
 
 unsigned int mysql_erron(MYSQL *connection); // 返回错误码
@@ -104,6 +108,20 @@ void mysql_free_result(MYSQL_RES *result);
 
 一次提取一行数据
 MYSQL_RES *mysql_use_result(MYSQL *connection);
+
+-----------------------------------------------------------------------------------------
+
+处理返回的数据
+
+unsigned int mysql_field_count(MYSQL *connection);
+提供了一些关于查询结果的基本信息，它接受连接对象，并返回结果集中的列数目
+
+MYSQL_FIELD *mysql_fetch_field(MYSQL_RES *result);
+将元数据和数据提取到一个新的结构中
+
+MYSQL_FIELD_OFFSET mysql_field_seek(MYSQL_RES *result, MYSQL_FIELD_OFFSET offset);
+覆盖当前的字段编号，该编号会随每次 mysql_fetch_field 调用而自动增加。如果给参数
+offset 传递 0，你将跳回第一列
 
 
 #endif

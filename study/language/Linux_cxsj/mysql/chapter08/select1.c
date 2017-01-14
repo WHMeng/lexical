@@ -12,10 +12,10 @@ int main(int argc, char *argv[]) {
 
    mysql_init(&my_connection);  
    if (mysql_real_connect(&my_connection, "localhost", "rick", 
-                                              "secret", "foo", 0, NULL, 0)) {
+                                              "rick", "foo", 0, NULL, 0)) {
    printf("Connection success\n");
    
-   res = mysql_query(&my_connection, "SELECT childno, fname, age FROM children WHERE age > 5");
+   res = mysql_query(&my_connection, "SELECT childno, fname, age FROM children WHERE age > 6");
 
    if (res) {
       printf("SELECT error: %s\n", mysql_error(&my_connection));
