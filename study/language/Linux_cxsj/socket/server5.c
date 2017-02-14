@@ -89,10 +89,9 @@ int main()
                     }
 
                     else {
-                        read(fd, &ch, 1);
-                        sleep(5);
+						char str[100] = {0};
+                        read(fd, str, 100);
                         printf("serving client on fd %d\n", fd);
-                        ch++;
                         write(fd, &ch, 1);
                     }
                 }

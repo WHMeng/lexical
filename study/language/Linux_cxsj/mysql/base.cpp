@@ -134,6 +134,8 @@ CREATE TABLE <table_name> (
 
 DROP TABLE <table_name> // 删除表
 
+\. table.sql path // 从文件导入指令
+
 AUTO_INCREMENT
 无论何时，当你在该列中写入 NULL 值时，它都会自动把一个自动分配的递增数字填入列数据中
 
