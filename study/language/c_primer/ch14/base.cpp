@@ -145,5 +145,67 @@ void Screen::do_display(std::ostream &os) const{
 类作用域
 =============
 
+int height;
+
+class Screen {
+public:
+	void dummy_fcn(index height){
+		cursor = width * height; // 使用参数 height
+		cursor = width * this->height; // 使用类成员 height
+		cursor = width * Screen::height; // 使用类成员 height
+		cursor = width * ::height; // 使用全局 height
+	}
+private:
+	index cursor;
+	index height, width;
+};
+
+构造函数
+==========
+
+构造函数不能声明为 const
+
+没有默认构造函数的类类型的成员，以及 const 或引用类型的成员，
+不管是哪种类型，都必须在构造函数初始化列表中进行初始化
+
+成员被初始化的次序就是定义成员的次序
+
+class X {
+	int i;
+	int j;
+public:
+	// run-time error: i is initialized before j
+	X(int val): j(val), i(j) {}
+};
+
+隐式类类型转换
+=================
+
+explicit 关键字只能用于类内部的构造函数声明上，在类的定义外部
+所做的定义上不要再重复它
+
+通常，除非有明显的理由想要定义隐式转换，否则，单形参构造函数应该为 explicit。
+將构造函数设置为 explicit 可以避免错误，并且当转换有用时，用户可以显式的构造
+对象
+
+友元
+========
+
+友元声明可以出现在类中的任何地方(通常將友元声明成组地放在类定义的开始或结尾)
+
+友元可以是普通的非成员函数，或前面定义的其他类的成员函数，或整个类
+
+友元声明將已命名的类或非成员函数引入到外围作用域中。此外，友元函数可以在类的
+内部定义，该函数的作用域扩展到包围该类定义的作用域
+
+class X {
+	friend class Y;
+	friend void f() {// ok to define freind function in the class body}
+};
+
+class Z {
+	Y *ymem; // ok: declaration for class Y introduced by friend in X
+	void g() {return ::f();} // ok: declaration of f introduced by X
+};
 
 #endif
