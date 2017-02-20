@@ -208,4 +208,76 @@ class Z {
 	void g() {return ::f();} // ok: declaration of f introduced by X
 };
 
+static 类成员
+==============
+
+使用 static 成员而不是全局对象有 3 个优点
+1. static 成员的名字是在类的作用域中，因此可以避免与其他类的成员或全局
+   对象名字冲突
+2. 可以实施封装。static 成员可以是私有成员，而全局对象不可以
+3. 通过阅读程序容易看出 static 成员是与特定类关联的
+
+class Account {
+public:
+	void applyint() {amount += amount * interestRate;}
+	static double rate() {return interestRate;}
+	static void rate(double); // set a new rate
+private:
+	std::string owner;
+	double amount;
+	static double interestRate;
+	static double initRate();
+};
+
+当在类外部定义 static 成员时，无须重复指定 static 保留字
+
+void Account::rate(double newRate){
+	interestRate = newRate;
+}
+
+因为 static 成员不是任何对象的组成部分，所以 static 成员函数不能被声明为 const。毕竟
+，將成员函数声明为 const 就是承诺不会修改该函数所属的对象。最后，static 成员函数也不
+能被声明为虚函数
+
+static 数据成员必须在类定义体的外部定义(正好一次)
+
+double Account::interestRate = initRate();
+
+一旦成员名出现，static 成员就是在类作用域中。因此，我们可以没有限定的直接使用名为
+initRate 的 static 成员函数，作为 interestRate 初始化式。注意，尽管 initRate 是私
+有的，我们仍然可以使用该函数来初始化 interestRate。像任意的其他成员定义一样，
+interestRate 的定义是在类的作用域中，因此可以访问该类的私有成员
+
+只要初始化式是一个常量表达式，整型 const static 数据成员就可以在类的定义体中进行初始化
+
+class Account {
+public:
+	static double rate() {return interestRate;}
+	static void rate(double); // set a new rate
+private:
+	static const int period = 30; // interest posted every 30 days
+	double daily_tbl[period]; // ok: period is constant expression
+};
+
+const int Account::period;
+
+const static 数据成员在类的定义体中初始化时，该数据成员仍必须在类的定义体外进行定义，
+在类内部提供初始化式时，成员的定义不必再指定初始值
+
+class Bar {
+public:
+	// ...
+private:
+	static Bar mem1; // ok
+	Bar *mem2;		 // ok
+	Bar mem3;		 // error
+};
+
+class A {
+	int f(int n = a); // error
+	int g(int n = b); // ok
+	int a;
+	static int b;
+};
+
 #endif
