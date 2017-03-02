@@ -79,3 +79,40 @@ Node *findKthToTail(Node *head, int k){
 	}
 	return ptrB;
 }
+
+// 输入两个单向链表，找到它们的第一个公共结点
+// 1 --> 2 --> 3 
+//              \
+//               6 --> 7
+//              /
+//       4 --> 5 
+//
+int getListLength(Node *head){
+	int len = 0;
+	Node *curNode = head;
+	while(curNode){
+		++len;
+		curNode = curNode->next;
+	}
+	return len;
+}
+
+Node *findFirstCommonNode(Node *head1, Node *head2){
+	int len1 = getListLength(head1);
+	int len2 = getListLength(head2);
+	int lenDif = abs(len1 - len2);
+	Node *headLong = head1;
+	Node *headShort = head2;
+	if(len1 < len2){
+		headLong = head2;
+		headShort = head1;
+	}
+	for(int i = 0; i < lenDif; i++)
+		headLong = headLong->next;
+	while(headLong && headShort && (headLong != headShort)){
+		headLong = headLong->next;
+		headShort = headShort->next;
+	}
+	Node *firstCommonNode = headLong;
+	return firstCommonNode;
+}
